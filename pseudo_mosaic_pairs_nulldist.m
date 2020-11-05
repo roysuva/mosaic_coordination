@@ -5,8 +5,8 @@ dsub = 1:size(positions.posmat.on_bt_off_bt,1);
 
 ctype1 = 1; % ON=1, OFF=2
 ctype2 = 2; % ON=1, OFF=2
-ctype_sub1 = 2; % 1=brisk sustained, 2=brisk transient, 3=transient
-ctype_sub2 = 2; % 1=brisk sustained, 2=brisk transient, 3=transient
+ctype_sub1 = 2; % 1=brisk sustained, 2=brisk transient
+ctype_sub2 = 2; % 1=brisk sustained, 2=brisk transient
 
 %% Get combinations 
 
@@ -90,7 +90,7 @@ roi_type = 'convexhull';
 interaction_type = 'Inverse-square'; 
 
 verbose = true; 
-buf2use = 1.0;
+buf2use = 1.2;
 Rb = 21; % number of bins+1 for radial energy    
 
 
@@ -258,6 +258,9 @@ bootCi_lower = mean(bootarea) - std(bootarea)*abs(norminv(alpha_ci/2));
 [h,p,ci,stats] = ttest(AreaNull, mean(AreaEmp)) 
 
 
+% Compute Cohen's d: Assessing Effect size based on difference of means and size of sample 
+cohen_d = (mean(AreaEmp) - mean(bootarea))/sqrt( ((numel(AreaEmp)-1)*std(AreaEmp) +...
+    (numel(bootarea)-1)*std(bootarea))/(numel(AreaEmp)+numel(bootarea)));
 
 %% Define colors for RF fill, and cell types whose mosaics will be analyzed 
 
@@ -305,10 +308,6 @@ rbary = [0 rbary 0];
 
 hf100 = figure(100); clf(hf100); hold on;
 set(hf100,'position',[473   391   434   362]); 
-% plot(bootbincent,bootfreqnorm,'ok','linewidth',2); hold on;
-% plot(Xfit,Yfit,'-r','linewidth',1); hold on; yll = get(gca,'ylim');
-% plot([bootCi bootCi]+norm_mean,[0 yll(2)],'--b','linewidth',2);
-% b =bar(bootbincent, bootfreqnorm.*diff(Xfit(1:2)),'EdgeColor',clx_sim,'FaceColor','none');
 plot(rbarx, rbary, '-','color',clx_sim,'linewidth',1); 
 plot(Xfit, Yfit_normalized, '-','linewidth',2,'color',[clx_sim 0.5]); 
 h1 = fill(fillx_sim,filly_sim,clx_sim); 
