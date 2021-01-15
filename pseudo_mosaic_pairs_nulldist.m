@@ -179,6 +179,20 @@ parfor k=1:length(allcombstable)
 end
 
 
+%% Normality of coordination index 
+
+[mean_minus_std, mean_plus_std, percentile_16, percentile_84] = deal(zeros(1,length(locate_ONOFF_samerec))); 
+for k=1:length(locate_ONOFF_samerec)
+    temp = raw_energy_accum{locate_ONOFF_samerec(k)}; 
+    mean_minus_std(k) = mean(temp) - std(temp); 
+    mean_plus_std(k) = mean(temp) + std(temp); 
+    percentile_16(k) = prctile(temp, 16); 
+    percentile_84(k) = prctile(temp, 84); 
+end
+[mean(percentile_16) mean(mean_minus_std)]
+[std(percentile_16) std(mean_minus_std)]./sqrt(length(mean_minus_std))
+[mean(percentile_84) mean(mean_plus_std)]
+[std(percentile_84) std(mean_plus_std)]./sqrt(length(mean_plus_std)) % sem
 
 %% Distribution of area under curve: True vs Fake mosaic pairs 
 
